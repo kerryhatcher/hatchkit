@@ -69,13 +69,13 @@ def test_init_with_claude_ai(tmp_path, monkeypatch):
 
 
 def test_init_claude_creates_prfix_command(tmp_path, monkeypatch):
-    """The prfix template should contain key markers like the frontmatter and GraphQL reference."""
+    """The prfix template should contain frontmatter and hatchkit pr commands."""
     monkeypatch.chdir(tmp_path)
     runner.invoke(app, ["init", "--here", "--ai", "claude"], catch_exceptions=False)
     prfix = (tmp_path / ".claude" / "commands" / "hatchkit.prfix.md").read_text()
     assert "description: Review and resolve all unresolved review threads" in prfix
-    assert "resolveReviewThread" in prfix
-    assert "GraphQL Quick Reference" in prfix
+    assert "hatchkit pr threads" in prfix
+    assert "hatchkit pr resolve" in prfix
 
 
 def test_init_with_copilot_ai(tmp_path, monkeypatch):

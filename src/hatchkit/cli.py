@@ -14,6 +14,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from hatchkit import __version__
+from hatchkit.pr import pr_app
 
 app = typer.Typer(
     name="hatchkit",
@@ -23,6 +24,8 @@ app = typer.Typer(
 )
 
 console = Console()
+
+app.add_typer(pr_app, name="pr")
 
 # ---------------------------------------------------------------------------
 # Helpers
