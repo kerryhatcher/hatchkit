@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+from importlib.resources import files
 from pathlib import Path
 
 import typer
@@ -54,6 +55,16 @@ def _tool_status(name: str) -> tuple[bool, str]:
     except Exception:
         version = path
     return True, version
+
+
+def _load_command_templates() -> dict[str, str]:
+    """Load all .md command templates from the templates/commands package."""
+    commands_pkg = files("hatchkit.templates.commands")
+    templates = {}
+    for item in commands_pkg.iterdir():
+        if item.name.endswith(".md"):
+            templates[item.name] = item.read_text(encoding="utf-8")
+    return templates
 
 
 # ---------------------------------------------------------------------------
@@ -213,8 +224,9 @@ def _write_ai_config(target: Path, ai: str, force: bool) -> None:
     if ai == "claude":
         commands_dir = target / ".claude" / "commands"
         commands_dir.mkdir(parents=True, exist_ok=True)
-        _write_file(commands_dir / "hatchkit.md", _agent_command_md("Claude Code"), force=force)
-        rprint("  [dim]Wrote Claude Code commands → .claude/commands/hatchkit.md[/dim]")
+        for name, content in _load_command_templates().items():
+            _write_file(commands_dir / name, content, force=force)
+        rprint("  [dim]Wrote Claude Code commands → .claude/commands/[/dim]")
 
     elif ai == "copilot":
         instructions_dir = target / ".github"
