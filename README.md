@@ -13,7 +13,7 @@
 ### Option 1 — Persistent installation (recommended)
 
 ```bash
-uv tool install hatchkit
+uv tool install git+https://github.com/kerryhatcher/hatchkit.git
 ```
 
 Then use `hatchkit` anywhere:
